@@ -1,6 +1,10 @@
 <?php
+require "./vendor/autoload.php";
+
+use App\Crud\DB;
 
 
+$db = new DB();
 ?>
 
 <!DOCTYPE html>

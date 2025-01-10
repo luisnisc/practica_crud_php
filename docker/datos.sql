@@ -1,4 +1,5 @@
-USE `tienda`;
+use tienda;
+
 CREATE TABLE  `tienda` (
                            `cod` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
                            `nombre` VARCHAR( 100 ) NOT NULL ,
@@ -6,7 +7,7 @@ CREATE TABLE  `tienda` (
 ) ENGINE = INNODB;
 
 CREATE TABLE  `usuarios` (
-                           `cod` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+                           `cod` VARCHAR(100) NOT NULL AUTO_INCREMENT  PRIMARY KEY ,
                            `nombre` VARCHAR( 100 ) NOT NULL ,
                            `password` VARCHAR( 13 ) NULL
 ) ENGINE = INNODB;
@@ -139,6 +140,6 @@ INSERT INTO `stock` (`producto`, `tienda`, `unidades`) VALUES
                                                            ('ZENMP48GB300', 1, 3),
                                                            ('ZENMP48GB300', 2, 2),
                                                            ('ZENMP48GB300', 3, 2);
-INSERT INTO `usuarios` (`nombre`, `password`) VALUES
+INSERT INTO `usuarios` (`cod`,`nombre`, `password`) VALUES
                                                            ( "manuel", "12345678"),
-                                                           ( "alicia", "12345678"),
+                                                           (  "alicia", "12345678");
