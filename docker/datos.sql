@@ -1,4 +1,4 @@
-use tienda;
+USE `tienda`;
 
 CREATE TABLE  `tienda` (
                            `cod` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -7,12 +7,13 @@ CREATE TABLE  `tienda` (
 ) ENGINE = INNODB;
 
 CREATE TABLE  `usuarios` (
-                           `cod` VARCHAR(100) NOT NULL AUTO_INCREMENT  PRIMARY KEY ,
+                           `cod` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
                            `nombre` VARCHAR( 100 ) NOT NULL ,
-                           `password` VARCHAR( 13 ) NULL
+                           `password` VARCHAR( 250 ) NULL
 ) ENGINE = INNODB;
 CREATE TABLE  `producto` (
-                             `cod` VARCHAR( 12 ) NOT NULL ,
+                             `cod` INT NOT NULL AUTO_INCREMENT ,
+                             `clave` VARCHAR( 12 ) NOT NULL ,
                              `nombre` VARCHAR( 200 ) NULL ,
                              `nombre_corto` VARCHAR( 50 ) NOT NULL ,
                              `descripcion` TEXT NULL ,
@@ -30,11 +31,12 @@ CREATE TABLE  `familia` (
 ) ENGINE = INNODB;
 
 CREATE TABLE   `stock` (
-                           `producto` VARCHAR( 12 ) NOT NULL ,
+                           `cod` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+                           `producto` INT NOT NULL ,
                            `tienda` INT NOT NULL ,
-                           `unidades` INT NOT NULL ,
-                           PRIMARY KEY ( `producto` , `tienda` )
+                           `unidades` INT NOT NULL
 ) ENGINE = INNODB;
+
 ALTER TABLE `producto`
     ADD CONSTRAINT `producto_ibfk_1`
         FOREIGN KEY (`familia`) REFERENCES `familia` (`cod`)
@@ -73,7 +75,7 @@ INSERT INTO `familia` (`cod`, `nombre`) VALUES
                                             ('TV', 'Televisores'),
                                             ('VIDEOC', 'Videocámaras');
 
-INSERT INTO `producto` (`cod`, `nombre`, `nombre_corto`, `descripcion`, `PVP`, `familia`) VALUES
+INSERT INTO `producto` (`clave`, `nombre`, `nombre_corto`, `descripcion`, `PVP`, `familia`) VALUES
                                                                                               ('3DSNG', NULL, 'Nintendo 3DS negro', 'Consola portátil de Nintendo que permitirá disfrutar de efectos 3D sin necesidad de gafas especiales, e incluirá retrocompatibilidad con el software de DS y de DSi.', '270.00', 'CONSOL'),
                                                                                               ('ACERAX3950', NULL, 'Acer AX3950 I5-650 4GB 1TB W7HP', 'Características:\r\n\r\nSistema Operativo : Windows® 7 Home Premium Original\r\n\r\nProcesador / Chipset\r\nNúmero de Ranuras PCI: 1\r\nFabricante de Procesador: Intel\r\nTipo de Procesador: Core i5\r\nModelo de Procesador: i5-650\r\nNúcleo de Procesador: Dual-core\r\nVelocidad de Procesador: 3,20 GHz\r\nCaché: 4 MB\r\nVelocidad de Bus: No aplicable\r\nVelocidad HyperTransport: No aplicable\r\nInterconexión QuickPathNo aplicable\r\nProcesamiento de 64 bits: Sí\r\nHyper-ThreadingSí\r\nFabricante de Chipset: Intel\r\nModelo de Chipset: H57 Express\r\n\r\nMemoria\r\nMemoria Estándar: 4 GB\r\nMemoria Máxima: 8 GB\r\nTecnología de la Memoria: DDR3 SDRAM\r\nEstándar de Memoria: DDR3-1333/PC3-10600\r\nNúmero de Ranuras de Memoria (Total): 4\r\nLector de tarjeta memoria: Sí\r\nSoporte de Tarjeta de Memoria: Tarjeta CompactFlash (CF)\r\nSoporte de Tarjeta de Memoria: MultiMediaCard (MMC)\r\nSoporte de Tarjeta de Memoria: Micro Drive\r\nSoporte de Tarjeta de Memoria: Memory Stick PRO\r\nSoporte de Tarjeta de Memoria: Memory Stick\r\nSoporte de Tarjeta de Memoria: CF+\r\nSoporte de Tarjeta de Memoria: Tarjeta Secure Digital (SD)\r\n\r\nStorage\r\nCapcidad Total del Disco Duro: 1 TB\r\nRPM de Disco Duro: 5400\r\nTipo de Unidad Óptica: Grabadora DVD\r\nCompatibilidad de Dispositivo Óptico: DVD-RAM/±R/±RW\r\nCompatibilidad de Medios de Doble Capa: Sí', '410.00', 'ORDENA'),
                                                                                               ('ARCLPMP32GBN', NULL, 'Archos Clipper MP3 2GB negro', 'Características:\r\n\r\nAlmacenamiento Interno Disponible en 2 GB*\r\nCompatibilidad Windows o Mac y Linux (con soporte para almacenamiento masivo)\r\nInterfaz para ordenador USB 2.0 de alta velocidad\r\nBattería2 11 horas música\r\nReproducción Música3 MP3\r\nMedidas Dimensiones: 52mm x 27mm x 12mm, Peso: 14 Gr', '26.70', 'MP3'),
@@ -102,44 +104,44 @@ INSERT INTO `producto` (`cod`, `nombre`, `nombre_corto`, `descripcion`, `PVP`, `
                                                                                               ('ZENMP48GB300', NULL, 'Creative Zen MP4 8GB Style 300', 'Características:\r\n\r\n8 GB de capacidad\r\nAutonomía: 32 horas con archivos MP3 a 128 kbps\r\nPantalla TFT de 1,8 pulgadas y 64.000 colores\r\nFormatos de audio compatibles: MP3, WMA (DRM9), formato Audible 4\r\nFormatos de foto compatibles: JPEG (BMP, TIFF, GIF y PNG\r\nFormatos de vídeo compatibles: AVI transcodificado (Motion JPEG)\r\nEcualizador de 5 bandas con 8 preajustes\r\nMicrófono integrado para grabar voz\r\nAltavoz y radio FM incorporada', '58.90', 'MP3');
 
 INSERT INTO `stock` (`producto`, `tienda`, `unidades`) VALUES
-                                                           ('3DSNG', 1, 2),
-                                                           ('3DSNG', 2, 1),
-                                                           ('ACERAX3950', 1, 1),
-                                                           ('ARCLPMP32GBN', 2, 1),
-                                                           ('ARCLPMP32GBN', 3, 2),
-                                                           ('BRAVIA2BX400', 3, 1),
-                                                           ('EEEPC1005PXD', 1, 2),
-                                                           ('EEEPC1005PXD', 2, 1),
-                                                           ('HPMIN1103120', 2, 1),
-                                                           ('HPMIN1103120', 3, 2),
-                                                           ('IXUS115HSAZ', 2, 2),
-                                                           ('KSTDT101G2', 3, 1),
-                                                           ('KSTDTG332GBR', 2, 2),
-                                                           ('KSTMSDHC8GB', 1, 1),
-                                                           ('KSTMSDHC8GB', 2, 2),
-                                                           ('KSTMSDHC8GB', 3, 2),
-                                                           ('LEGRIAFS306', 2, 1),
-                                                           ('LGM237WDP', 1, 1),
-                                                           ('LJPROP1102W', 2, 2),
-                                                           ('OPTIOLS1100', 1, 3),
-                                                           ('OPTIOLS1100', 2, 1),
-                                                           ('PAPYRE62GB', 1, 2),
-                                                           ('PAPYRE62GB', 3, 1),
-                                                           ('PBELLI810323', 2, 1),
-                                                           ('PIXMAIP4850', 2, 1),
-                                                           ('PIXMAIP4850', 3, 2),
-                                                           ('PIXMAMP252', 2, 1),
-                                                           ('PS3320GB', 1, 1),
-                                                           ('PWSHTA3100PT', 2, 2),
-                                                           ('PWSHTA3100PT', 3, 2),
-                                                           ('SMSGCLX3175', 2, 1),
-                                                           ('SMSN150101LD', 3, 1),
-                                                           ('SMSSMXC200PB', 2, 1),
-                                                           ('STYLUSSX515W', 1, 1),
-                                                           ('TSSD16GBC10J', 3, 2),
-                                                           ('ZENMP48GB300', 1, 3),
-                                                           ('ZENMP48GB300', 2, 2),
-                                                           ('ZENMP48GB300', 3, 2);
-INSERT INTO `usuarios` (`cod`,`nombre`, `password`) VALUES
-                                                           ( "manuel", "12345678"),
-                                                           (  "alicia", "12345678");
+                                                           ('1', 1, 2),
+                                                           ('1', 2, 1),
+                                                           ('2', 1, 1),
+                                                           ('3', 2, 1),
+                                                           ('3', 3, 2),
+                                                           ('4', 3, 1),
+                                                           ('5', 1, 2),
+                                                           ('5', 2, 1),
+                                                           ('6', 2, 1),
+                                                           ('6', 3, 2),
+                                                           ('7', 2, 2),
+                                                           ('8', 3, 1),
+                                                           ('8', 2, 2),
+                                                           ('8', 1, 1),
+                                                           ('8', 2, 2),
+                                                           ('8', 3, 2),
+                                                           ('9', 2, 1),
+                                                           ('10', 1, 1),
+                                                           ('11', 2, 2),
+                                                           ('12', 1, 3),
+                                                           ('12', 2, 1),
+                                                           ('13', 1, 2),
+                                                           ('13', 3, 1),
+                                                           ('14', 2, 1),
+                                                           ('15', 2, 1),
+                                                           ('15', 3, 2),
+                                                           ('16', 2, 1),
+                                                           ('17', 1, 1),
+                                                           ('17', 2, 2),
+                                                           ('17', 3, 2),
+                                                           ('18', 2, 1),
+                                                           ('19', 3, 1),
+                                                           ('20', 2, 1),
+                                                           ('21', 1, 1),
+                                                           ('22', 3, 2),
+                                                           ('23', 1, 3),
+                                                           ('23', 2, 2),
+                                                           ('23', 3, 2);
+INSERT INTO `usuarios` (`nombre`, `password`) VALUES
+                                                  ( "manuel", "12345678"),
+                                                  ( "alicia", "12345678");

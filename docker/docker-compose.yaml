@@ -14,11 +14,12 @@ services:
       - ./datos.sql:/docker-entrypoint-initdb.d/datos.sql
     environment:
       - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
-      - MYSQL_USER=${DB_HOST]
+      - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${PASSWORD}
       - MYSQL_DATABASE=${DATABASE}
     ports:
       - 33306:3306
+    container_name: mysql
   phpmyadmin:
     image: phpmyadmin
     ports:
@@ -28,6 +29,6 @@ services:
       - PMA_ARBITRARY=1
     depends_on:
       - mysql
-
+    container_name: phpmyadmin
 
 
