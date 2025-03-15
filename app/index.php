@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
+
+
 ?>
 <!doctype html>
 <html lang="en">
