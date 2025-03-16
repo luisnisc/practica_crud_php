@@ -21,4 +21,5 @@ RUN mkdir -p /var/log/apache2 && touch /var/log/apache2/error.log
 
 RUN docker-php-ext-install mysqli
 RUN docker-php-ext-enable mysqli
+RUN docker-php-ext-install pdo pdo_mysql
 

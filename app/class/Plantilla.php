@@ -5,7 +5,7 @@ namespace App\Crud;
 class Plantilla
 {
    const EDIT=<<<FIN
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-700">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20" class="w-6 h-6 text-blue-700">
   <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
 </svg>
 
@@ -17,17 +17,37 @@ FIN;
 </svg>
 FIN;
 
-   private static function get_select_foranea(array $foraneas, DB $db):string{
-     $select ="";
+private static function get_select_foranea(string $campo, array $foraneas, DB $db): string {
+    $select = "<select name='$campo'>";
+    foreach($foraneas as $clave => $valor) {
+       $select .= "<option value='$clave'>$valor</option>";
+    }
+    $select .= "</select>";
+    return $select;
+}
 
-      return $select;
+public static function get_formulario(array $campos, array $foraneas, $db): string
+{
+   $html = "<div>";
+   $html .= "<form action='add.php' method='post'>";
+   foreach ($campos as $campo) {
+      if ($campo === 'cod') {
+         continue;
+      }
+      $html .= "<label for='$campo'>$campo</label>";
+      if (array_key_exists($campo, $foraneas)) {
+         $html .= self::get_select_foranea($campo, $foraneas[$campo], $db);
+      } else if($campo === 'PVP'){
+         $html .= "<input type='number' name='$campo' id='$campo' step='0.01' > ";
+      } else {
+         $html .= "<input type='text' name='$campo' id='$campo' > ";
+      }
    }
-   public static function get_formulario( array $campos, array $foraneas, $db):string
-   {
-      $html="";
-
-      return $html;
-   }
+   $html .= "<input type='submit' value='Agregar' style='margin-right:4px' name='submit'>";
+   $html .= "<input type='submit' value='Cancelar' name='submit'>";
+   $html .= "</form>";
+   return $html;
+}
 
    private static function add_field(string $campo):string
    {
@@ -57,15 +77,18 @@ FIN;
    /**
     * @return string
     */
-   public static function cabecera(): string
+   private static function cabecera(): string
    {
-     $tabla="";
-      return $tabla;
+      return "<div><table border='1'>";
    }
 
    private static function titulos(array $campos): string
    {
-      $cabecera="";
+      $cabecera="<tr>";
+      foreach($campos as $col){
+         $cabecera.="<th>$col</th>";
+      }
+      $cabecera.="</tr>";
       return $cabecera;
    }
 
@@ -76,17 +99,26 @@ FIN;
     * @param string $add
     * @return string
     */
-   public static function filas(array $filas, string $borrar, string $edit): string
+   public static function filas(array $filas): string
    {
-      $tabla="";
+      $borrar = self::BORRAR;
+      $output = "";
       foreach ($filas as $fila) {
-
+         $output .= "<tr>";
+         foreach ($fila as $campo) {
+            $output .= "<td>$campo</td>";
+         }
+         $id = $fila['cod'] ?? '';
+         $output .= "<td>
+            <form action='listado.php' method='post' style='margin:0;'>
+               <input type='hidden' name='cod' value='$id'>
+               <input type='hidden' name='submit' value='Borrar'>
+               <button type='button' class='delete-button'>$borrar</button>
+            </form>
+         </td>";
+         $output .= "</tr>";
       }
-
-
-
-
-      return $tabla;
+      return $output;
    }
 
    /**
